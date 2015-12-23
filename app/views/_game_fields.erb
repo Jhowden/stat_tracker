@@ -1,0 +1,10 @@
+<% fieldset( :game ) do |f| %>
+  <%= f.label( :home_team )%>
+  <%= f.input( :home_team, placeholder: "Home Team" ) %><br>
+  <%= f.label( :away_team )%>
+  <%= f.input( :away_team ) %><br>
+  <%= f.label( :winner )%>
+  <%= f.input( :winner, placeholder: "Home Team" ) %><br>
+  <%= f.label( :date_of_game )%>
+  <%= f.input( :date_played, placeholder: "MM/DD/YYYY" ) %> <br>
+<% end %>

@@ -1,0 +1,10 @@
+<% fieldset( :goal ) do |f| %>
+  <%= f.label( :player )%>
+  <%= f.input( :player ) %><br>
+  <%= f.label( :PPP )%>
+  <%= f.radio( :ppp, ["Y", "N"] ) %><br>
+  <%= f.label( :period )%>
+  <%= f.input( :period ) %><br>
+  <%= f.label( :time_scored )%>
+  <%= f.input( :time_scored ) %><br>
+<% end %>

@@ -7,6 +7,7 @@ gem 'sinatra-contrib'
 
 gem 'thin'
 
+gem 'sinatra-formhelpers-ng'
 gem 'activesupport'
 gem 'activerecord'
 
