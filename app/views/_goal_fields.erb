@@ -1,10 +1,13 @@
-<% fieldset( :goal ) do |f| %>
-  <%= f.label( :player )%>
-  <%= f.input( :player ) %><br>
-  <%= f.label( :PPP )%>
-  <%= f.radio( :ppp, ["Y", "N"] ) %><br>
-  <%= f.label( :period )%>
-  <%= f.input( :period ) %><br>
-  <%= f.label( :time_scored )%>
-  <%= f.input( :time_scored ) %><br>
-<% end %>
+<fieldset>
+  <label for='player'>Player</label>
+  <input type='text' id='player' name='goal[][player]' placeholder=Name>
+  <br>
+  <label for='ppp'>PPP</label>
+  <input type='text' id='ppp' name='goal[][ppp]' size="1" placeholder=N>
+  <br>
+  <label for='period'>Period</label>
+  <input type='text' id='period' name='goal[][period]' size="1" placeholder=1>
+  <br>
+  <label for='time_scored'>Time Scored</label>
+  <input type='text' id='time_scored' name='goal[][time_scored]' size="7" placeholder=10:10>
+</fieldset>
