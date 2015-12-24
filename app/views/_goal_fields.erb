@@ -11,3 +11,5 @@
   <label for='time_scored'>Time Scored</label>
   <input type='text' id='time_scored' name='goal[][time_scored]' size="7" placeholder=10:10>
 </fieldset>
+
+<%= FormHelper.link_to_add_fields "Add Assist", erb( "_assist_fields".to_sym ) %><br>

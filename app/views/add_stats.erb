@@ -3,6 +3,6 @@
 <%= form( '/add_game', :create ) %>
 
 <%= erb :_game_fields %>
-<%= FormHelper.link_to_add_fields "Add Goal", erb( "_goal_fields".to_sym ) %>
+<%= FormHelper.link_to_add_fields "Add Goal", erb( "_goal_fields".to_sym ) %><br>
 
 <%= submit 'Create game' %>
