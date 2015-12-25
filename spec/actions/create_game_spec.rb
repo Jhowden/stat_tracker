@@ -86,6 +86,22 @@ describe Actions::CreateGame do
       expect( Game ).to have_received( :create! ).with game_params
     end
     
+    it "skips CreateGoal when given no goal data" do
+      create_game = described_class.new( {
+        "game"=> 
+          {
+            "home_team" => "Home", 
+            "away_team" => "Away", 
+            "winner" => "Home", 
+            "date_played" => "12/23/15"
+          }, 
+        "goal"=>[]
+      }, logger )
+      create_game.call
+      
+      expect( Actions::CreateGoal ).to_not have_received( :new )
+    end
+    
     it "instantiates a CreateGoal" do
       create_game.call
       
