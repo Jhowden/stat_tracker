@@ -34,8 +34,8 @@ module Actions
     def transform_assist( map, goal )
       assist_data = map.delete( "assist" )
       return {} if assist_data.empty?
-      assist_data.each do |m|
-        m.merge!( 
+      assist_data.map do |m|
+        m.merge( 
           "player" => find_player( m["player"] ),
           "ppp" => map["ppp"],
           "period" => map["period"],
