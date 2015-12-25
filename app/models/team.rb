@@ -4,5 +4,5 @@ class Team < ActiveRecord::Base
   has_many :players
 
   validates_uniqueness_of :name
-  validate_presence_of :name
+  validates_presence_of :name
 end
