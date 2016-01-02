@@ -58,14 +58,14 @@ describe Actions::CreateGame do
   subject( :create_game ) { described_class.new params, logger }
   
   before :each do
-    ["Game", "Actions::CreateGoal", "Team"].each do |klass|
+    ["Game", "Actions::CreateScore", "Team"].each do |klass|
       stub_const klass, Class.new
     end
     stub_const "ActiveRecord::Rollback", Class.new( StandardError )
     
     allow( Game ).to receive( :create! ).and_return game
     
-    allow( Actions::CreateGoal ).to receive( :new ).and_return create_goal
+    allow( Actions::CreateScore ).to receive( :new ).and_return create_goal
     
     allow( Game ).to receive( :transaction ).and_yield
     
@@ -86,7 +86,7 @@ describe Actions::CreateGame do
       expect( Game ).to have_received( :create! ).with game_params
     end
     
-    it "skips CreateGoal when given no goal data" do
+    it "skips CreatePoint when given no goal data" do
       create_game = described_class.new( {
         "game"=> 
           {
@@ -99,13 +99,13 @@ describe Actions::CreateGame do
       }, logger )
       create_game.call
       
-      expect( Actions::CreateGoal ).to_not have_received( :new )
+      expect( Actions::CreateScore ).to_not have_received( :new )
     end
     
     it "instantiates a CreateGoal" do
       create_game.call
       
-      expect( Actions::CreateGoal ).to have_received( :new ).with( game, goal_params )
+      expect( Actions::CreateScore ).to have_received( :new ).with( game, goal_params )
     end
     
     it "creates a new goal" do

@@ -10,7 +10,7 @@ module Actions
     def call()
       Game.transaction do
         game = create_game
-        Actions::CreateGoal.new( game, transformed_params["goal"] ).call unless transformed_params["goal"].empty?
+        Actions::CreateScore.new( game, transformed_params["goal"] ).call unless transformed_params["goal"].empty?
       end
     rescue ActiveRecord::Rollback => e
       logger.error "Bad data creating data: #{e.backtrace}"

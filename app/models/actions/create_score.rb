@@ -1,5 +1,5 @@
 module Actions
-  class CreateGoal
+  class CreateScore
     attr_reader :game, :goal_data
     
     def initialize( game, goal_data )
@@ -11,8 +11,8 @@ module Actions
       goal_data.each do |data|
         transformed_goal_map = transform_goal_data data
         goal = Goal.create! transformed_goal_map
-        transformed_assist = transform_assist transformed_goal_map, goal
-        Actions::CreateAssist.new( transformed_assist )
+        transformed_assist_map = transform_assist_data transformed_goal_map, goal
+        Assist.create!( transformed_assist_map )
       end
     end
     
@@ -27,11 +27,7 @@ module Actions
       )
     end
     
-    def find_player( player_name )
-      Player.where( player_name:  player_name ).first
-    end
-    
-    def transform_assist( map, goal )
+    def transform_assist_data( map, goal )
       assist_data = map.delete( "assist" )
       return {} if assist_data.empty?
       assist_data.map do |m|
@@ -42,6 +38,10 @@ module Actions
           "goal" => goal
         )
       end
+    end
+    
+    def find_player( player_name )
+      Player.where( player_name:  player_name ).first
     end
   end
 end

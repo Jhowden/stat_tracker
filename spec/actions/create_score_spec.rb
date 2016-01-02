@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Actions::CreateGoal do
+describe Actions::CreateScore do
   let( :params ) {
     [
       {
@@ -64,8 +64,8 @@ describe Actions::CreateGoal do
       [assist2_data.first["player"]]
     )
     
-    stub_const "Actions::CreateAssist", Class.new
-    allow( Actions::CreateAssist ).to receive( :new ).and_return create_assist
+    stub_const "Assist", Class.new
+    allow( Assist ).to receive( :create! ).and_return create_assist
   end
   
   describe "#call" do
@@ -86,12 +86,12 @@ describe Actions::CreateGoal do
         with( goal2_map )
     end
     
-    it "creates an Actions::CreateAssist" do
+    it "creates an Assist" do
       create_goal.call
       
-      expect( Actions::CreateAssist ).to have_received( :new ).
+      expect( Assist ).to have_received( :create! ).
         with( assist1_data )
-      expect( Actions::CreateAssist ).to have_received( :new ).
+      expect( Assist ).to have_received( :create! ).
         with( assist2_data )
     end
   end
