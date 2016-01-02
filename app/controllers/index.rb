@@ -7,5 +7,5 @@ get "/add_stats" do
 end
 
 post "/add_game" do
-  puts params
+  Actions::CreateGame.new( params )
 end
