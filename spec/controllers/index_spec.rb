@@ -44,6 +44,24 @@ describe "The EASHL App" do
         with( name: "Home" )
     end
     
+    it "redirects if it does not find the team" do
+      allow( Team ).to receive( :where ).and_return []
+      
+      get "/view_stats/Home"
+      follow_redirect!
+      
+      expect( last_request.url ).to eq( "http://example.org/" )
+    end
+    
+    it "sets a flash message when it cannot find the team" do
+      allow( Team ).to receive( :where ).and_return []
+      
+      get "/view_stats/Home"
+      follow_redirect!
+      
+      expect( last_response.body ).to match /No team/
+    end
+    
     it "instantiates a GameRepository" do
       get "/view_stats/Home"
       

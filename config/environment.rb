@@ -7,7 +7,6 @@ require 'rubygems'
 
 require 'uri'
 require 'pathname'
-require 'rack-flash'
 
 require 'pg'
 require 'active_record'
@@ -17,6 +16,7 @@ require 'sinatra'
 require "sinatra/reloader" if development?
 
 require 'sinatra/form_helpers'
+require 'sinatra/flash'
 
 require 'erb'
 
