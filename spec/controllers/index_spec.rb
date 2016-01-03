@@ -18,6 +18,46 @@ describe "The EASHL App" do
     end
   end
   
+  describe "GET '/view_stats'" do
+    let( :team ) { double( "team" ) }
+    
+    before :each do
+      stub_const "Repository::GameRepository", Class.new
+      allow( Repository::GameRepository ).to receive( :new ).
+        and_return Repository::GameRepository
+      allow( Repository::GameRepository ).to receive( :game_victor_data )
+      
+      stub_const "Team", Class.new
+      allow( Team ).to receive( :where ).and_return [team]
+    end
+    
+    it "grabs the view_stats page" do
+      get "/view_stats/Home"
+    
+      expect( last_response ).to be_ok
+    end
+    
+    it "finds the team" do
+      get "/view_stats/Home"
+      
+      expect( Team ).to have_received( :where ).
+        with( name: "Home" )
+    end
+    
+    it "instantiates a GameRepository" do
+      get "/view_stats/Home"
+      
+      expect( Repository::GameRepository ).to have_received( :new ).
+        with( team )
+    end
+    
+    it "it grabs all of the games where the team is the winner" do
+      get "/view_stats/Home"
+      
+      expect( Repository::GameRepository ).to have_received( :game_victor_data )
+    end
+  end
+  
   describe "POST '/add_game'" do
     let( :params ) do
       {
