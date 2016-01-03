@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe "The EASHL App" do
-  
   describe "GET '/'" do
     it "grabs the index page" do
       get "/"
@@ -50,7 +49,7 @@ describe "The EASHL App" do
       get "/view_stats/Home"
       follow_redirect!
       
-      expect( last_request.url ).to eq( "http://example.org/" )
+      expect( last_request.url ).to eq "http://example.org/"
     end
     
     it "sets a flash message when it cannot find the team" do
@@ -100,7 +99,10 @@ describe "The EASHL App" do
     
     before :each do
       stub_const "Actions::CreateGame", Class.new
-      allow( Actions::CreateGame ).to receive( :new )
+      allow( Actions::CreateGame ).to receive( :new ).
+        and_return Actions::CreateGame
+      allow( Actions::CreateGame ).to receive( :call ).
+        and_return true
     end
     
     it "instantiates a new Actions::CreateGame" do
@@ -114,6 +116,47 @@ describe "The EASHL App" do
       
       expect( Actions::CreateGame ).to have_received( :new ).
         with( params )
+    end
+    
+    it "creates the game" do
+      post "/add_game", params
+      
+      expect( Actions::CreateGame ).to have_received( :call )
+    end
+    
+    it "sets a successful flash message" do
+      post "/add_game", params
+      follow_redirect!
+      
+      expect( last_response.body ).to match /Successfully/
+    end
+    
+    it "redirects back to the home page" do
+      post "/add_game", params
+      follow_redirect!
+      
+      expect( last_request.url ).to eq "http://example.org/"
+    end
+    
+    context "when it fails to create the game" do
+      before :each do
+        allow( Actions::CreateGame ).to receive( :call ).
+          and_return false
+      end
+      
+      it "redirects back to the /add_stats page when it fails" do
+        post "/add_game", params
+        follow_redirect!
+      
+        expect( last_request.url ).to eq "http://example.org/add_stats"
+      end
+    
+      it "sets a failed flas message" do
+        post "/add_game", params
+        follow_redirect!
+      
+        expect( last_response.body ).to match /Failed/
+      end
     end
   end
 end

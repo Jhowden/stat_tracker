@@ -12,8 +12,10 @@ module Actions
         game = create_game
         Actions::CreateScore.new( game, transformed_params["goal"] ).call unless transformed_params["goal"].empty?
       end
+      true
     rescue ActiveRecord::Rollback => e
       logger.error "Bad data creating data: #{e.backtrace}"
+      false
     end
     
     private

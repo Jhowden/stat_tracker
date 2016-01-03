@@ -63,10 +63,9 @@ describe Actions::CreateGame do
     end
     stub_const "ActiveRecord::Rollback", Class.new( StandardError )
     
-    allow( Game ).to receive( :create! ).and_return game
-    
     allow( Actions::CreateScore ).to receive( :new ).and_return create_goal
     
+    allow( Game ).to receive( :create! ).and_return game
     allow( Game ).to receive( :transaction ).and_yield
     
     allow( Team ).to receive( :where ).and_return [game_params["home_team"]], [game_params["away_team"]]
@@ -86,7 +85,7 @@ describe Actions::CreateGame do
       expect( Game ).to have_received( :create! ).with game_params
     end
     
-    it "skips CreatePoint when given no goal data" do
+    it "skips CreateScore when given no goal data" do
       create_game = described_class.new( {
         "game"=> 
           {
@@ -102,22 +101,32 @@ describe Actions::CreateGame do
       expect( Actions::CreateScore ).to_not have_received( :new )
     end
     
-    it "instantiates a CreateGoal" do
+    it "instantiates a CreateScore" do
       create_game.call
       
       expect( Actions::CreateScore ).to have_received( :new ).with( game, goal_params )
     end
     
-    it "creates a new goal" do
+    it "creates a new score" do
       create_game.call
       
       expect( create_goal ).to have_received( :call )
     end
     
+    it "returns true when successfully creating a game" do
+      expect( create_game.call ).to be
+    end
+
     it "rescues an ActiveRecord::Rollback when invalid" do
       allow( Game ).to receive( :create! ).and_raise ActiveRecord::Rollback
       
       expect{ create_game.call }.to_not raise_error
+    end
+    
+    it "returns false when failing to create a game" do
+      allow( Game ).to receive( :create! ).and_raise ActiveRecord::Rollback
+      
+      expect( create_game.call ).to be_falsey
     end
     
     it "writes to the logger when ActiveRecord::Rollback is raised" do

@@ -19,5 +19,11 @@ get "/view_stats/:team_name" do
 end
 
 post "/add_game" do
-  Actions::CreateGame.new params
+  if Actions::CreateGame.new( params ).call
+    flash[:success] = "Successfully created game!"
+    redirect to( "/" )
+  else
+    flash[:error] = "Failed to create game, please try again."
+    redirect to( "/add_stats" )
+  end
 end
