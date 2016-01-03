@@ -4,6 +4,9 @@ set :app_file, __FILE__
 
 configure do
   enable :sessions
+  use Rack::Session::Cookie
+  use Rack::Flash
+  
   set :session_secret, ENV['SESSION_SECRET'] || 'super secret'
 
   set :views, File.join( Sinatra::Application.root, "app", "views" )
