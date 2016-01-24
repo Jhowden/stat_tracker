@@ -78,6 +78,11 @@ namespace :db do
       ENV["SCOPE"].blank? || (ENV["SCOPE"] == migration.scope)
     end
   end
+  
+  desc "Populate the database with dummy data by running db/seeds.rb"
+  task :seed do
+    require APP_ROOT.join('db', 'seeds.rb')
+  end
 
   desc "Returns the current schema version number"
   task :version do

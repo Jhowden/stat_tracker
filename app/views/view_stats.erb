@@ -1,15 +1,16 @@
 <h1>View Your Stats Below</h1>
- <div id="chart" data-src="<%= @games_data %>"></div>
+ <div id="chart" data-src=<%= view_stats( @team ) %>></div>
 <script>
   (function(d3) {
     'use strict';
-    var dataset = $( "#chart" ).data( "src" )
-    var dataset = [
-      { label: 'Abulia', count: 10 }, 
-      { label: 'Betelgeuse', count: 20 },
-      { label: 'Cantaloupe', count: 30 },
-      { label: 'Dijkstra', count: 40 }
-    ];
+    var dataset = $( "#chart" ).data( "src" );
+    // var dataset = [
+    //           { label: 'Abulia', count: 10 },
+    //           { label: 'Betelgeuse', count: 20 },
+    //           { label: 'Cantaloupe', count: 30 },
+    //           { label: 'Dijkstra', count: 40 }
+    //         ];
+    console.log( dataset );
     
     var width = 960;
     

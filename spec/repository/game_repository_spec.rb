@@ -12,7 +12,7 @@ describe Repository::GameRepository do
     end
     it "returns json of the games won and games lost" do
       expect( game_repo.game_victor_data ).to eq( 
-        [{label: "won", count: 2}.to_json, {label: "lost", count: 3}.to_json] )
+        [{label: "won", count: 2}, {label: "lost", count: 3}] )
     end
   end
 end

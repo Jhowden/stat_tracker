@@ -61,14 +61,14 @@ describe "The EASHL App" do
       expect( last_response.body ).to match /No team/
     end
     
-    it "instantiates a GameRepository" do
+    it "instantiates a GameRepository" do # this test is gross because it is calling the helper in the view and passing...
       get "/view_stats/Home"
       
       expect( Repository::GameRepository ).to have_received( :new ).
         with( team )
     end
     
-    it "it grabs all of the games where the team is the winner" do
+    it "it grabs all of the games where the team is the winner" do # this test is gross because it is calling the helper in the view and passing...
       get "/view_stats/Home"
       
       expect( Repository::GameRepository ).to have_received( :game_victor_data )
