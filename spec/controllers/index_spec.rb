@@ -17,7 +17,7 @@ describe "The EASHL App" do
     end
   end
   
-  describe "GET '/view_stats'" do
+  describe "GET '/view_team_stats'" do
     let( :team ) { double( "team" ) }
     
     before :each do
@@ -31,13 +31,13 @@ describe "The EASHL App" do
     end
     
     it "grabs the view_stats page" do
-      get "/view_stats/Home"
+      get "/view_team_stats/Home"
     
       expect( last_response ).to be_ok
     end
     
     it "finds the team" do
-      get "/view_stats/Home"
+      get "/view_team_stats/Home"
       
       expect( Team ).to have_received( :where ).
         with( name: "Home" )
@@ -46,7 +46,7 @@ describe "The EASHL App" do
     it "redirects if it does not find the team" do
       allow( Team ).to receive( :where ).and_return []
       
-      get "/view_stats/Home"
+      get "/view_team_stats/Home"
       follow_redirect!
       
       expect( last_request.url ).to eq "http://example.org/"
@@ -55,21 +55,21 @@ describe "The EASHL App" do
     it "sets a flash message when it cannot find the team" do
       allow( Team ).to receive( :where ).and_return []
       
-      get "/view_stats/Home"
+      get "/view_team_stats/Home"
       follow_redirect!
       
       expect( last_response.body ).to match /No team/
     end
     
     it "instantiates a GameRepository" do # this test is gross because it is calling the helper in the view and passing...
-      get "/view_stats/Home"
+      get "/view_team_stats/Home"
       
       expect( Repository::GameRepository ).to have_received( :new ).
         with( team )
     end
     
     it "it grabs all of the games where the team is the winner" do # this test is gross because it is calling the helper in the view and passing...
-      get "/view_stats/Home"
+      get "/view_team_stats/Home"
       
       expect( Repository::GameRepository ).to have_received( :game_victor_data )
     end

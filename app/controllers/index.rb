@@ -10,7 +10,7 @@ get "/add_stats" do
   erb :add_stats
 end
 
-get "/view_stats/:team_name" do
+get "/view_team_stats/:team_name" do
   @team = Team.where( name: params["team_name"]  ).first
   if @team
     erb :view_stats
