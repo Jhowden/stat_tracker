@@ -49,7 +49,7 @@ describe Actions::CreateScore do
   let( :goal1 ) { double( "goal1" ) }
   let( :goal2 ) { double( "goal2" ) }
   let( :create_assist ) { double( "create_assist", call: nil ) }
-  subject( :create_goal ) { described_class.new game, params }
+  subject( :create_score ) { described_class.new game, params }
   
   before :each do
     stub_const "Goal", Class.new
@@ -64,13 +64,16 @@ describe Actions::CreateScore do
       [assist2_data.first["player"]]
     )
     
-    stub_const "Assist", Class.new
-    allow( Assist ).to receive( :create! ).and_return create_assist
+    stub_const "PrimaryAssist", Class.new
+    allow( PrimaryAssist ).to receive( :create! ).and_return create_assist
+    
+    stub_const "SecondaryAssist", Class.new
+    allow( SecondaryAssist ).to receive( :create! ).and_return create_assist
   end
   
   describe "#call" do
     it "finds the player who scored the goal" do
-      create_goal.call
+      create_score.call
       
       expect( Player ).to have_received( :where ).with player_name: params.first["player"]
       expect( Player ).to have_received( :where ).
@@ -78,7 +81,7 @@ describe Actions::CreateScore do
     end
     
     it "creates the goals" do
-      create_goal.call
+      create_score.call
       
       expect( Goal ).to have_received( :create! ).
         with( goal1_map )
@@ -86,13 +89,56 @@ describe Actions::CreateScore do
         with( goal2_map )
     end
     
-    it "creates an Assist" do
-      create_goal.call
+    context "when there are two assists on a goal" do
+      it "creates a PrimaryAssist and SecondaryAssist" do
+        create_score.call
+        
+        expect( PrimaryAssist ).to have_received( :create! ).
+          with( assist1_data.first )
+        expect( SecondaryAssist ).to have_received( :create! ).
+          with( assist1_data.last )
+      end
+    end
+    
+    context "when there is only one assist on a goal" do
+      subject( :create_score ) { described_class.new game, [params.last] }
       
-      expect( Assist ).to have_received( :create! ).
-        with( assist1_data )
-      expect( Assist ).to have_received( :create! ).
-        with( assist2_data )
+      before :each do
+        allow( Player ).to receive( :where ).and_return(
+          [goal2_map["player"]],
+          [assist2_data.first["player"]]
+        )
+        
+        allow( Goal ).to receive( :create! ).and_return goal2
+      end
+      
+      it "creates only a PrimaryAssist" do
+        create_score.call
+        
+        expect( PrimaryAssist ).to have_received( :create! ).
+          with( assist2_data.first )
+        expect( SecondaryAssist ).to_not have_received( :create! )
+      end
+    end
+    
+    context "when there is no Assist" do
+      let( :no_assist_params ) { [params.first.merge( "assist" => [] )] }
+      subject( :create_score ) { described_class.new game, no_assist_params }
+      
+      before :each do
+        allow( Player ).to receive( :where ).and_return(
+          [goal1_map["player"]],
+        )
+        
+        allow( Goal ).to receive( :create! ).and_return goal1
+      end
+      
+      it "does NOT create an Assist" do
+        create_score.call
+        
+        expect( PrimaryAssist ).to_not have_received( :create! )
+        expect( SecondaryAssist ).to_not have_received( :create! )
+      end
     end
   end
 end

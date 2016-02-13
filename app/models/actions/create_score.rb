@@ -12,7 +12,7 @@ module Actions
         transformed_goal_map = transform_goal_data data
         goal = Goal.create! transformed_goal_map
         transformed_assist_map = transform_assist_data transformed_goal_map, goal
-        Assist.create!( transformed_assist_map )
+        create_assists!( transformed_assist_map ) unless transformed_assist_map.empty?
       end
     end
     
@@ -38,6 +38,11 @@ module Actions
           "goal" => goal
         )
       end
+    end
+    
+    def create_assists!( assist_map )
+      PrimaryAssist.create! assist_map.first
+      SecondaryAssist.create! assist_map.last unless assist_map.size == 1
     end
     
     def find_player( player_name )
