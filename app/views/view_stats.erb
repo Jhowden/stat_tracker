@@ -4,11 +4,6 @@
   (function(d3) {
     'use strict';
     var dataset = $( "#chart" ).data( "src" );
-    // var dataset = [
-    //           { label: 'Abulia', count: 10 },
-    //           { label: 'Betelgeuse', count: 20 },
-    //           { label: 'Cantaloupe', count: 30 },
-    //           { label: 'Dijkstra', count: 40 }
     //         ];
     console.log( dataset );
     
@@ -41,6 +36,18 @@
       .value(function(d) { return d.count; })
       .sort(null);
       
+    var tooltip = d3.select('#chart')
+          .append('div')             
+          .attr('class', 'tooltip'); 
+                      
+    tooltip.append('div')            
+      .attr('class', 'label');       
+         
+    tooltip.append('div')            
+      .attr('class', 'count');       
+    tooltip.append('div')            
+      .attr('class', 'percent');
+      
     var path = svg.selectAll('path')
       .data(pie(dataset))
       .enter()
@@ -49,6 +56,21 @@
       .attr('fill', function(d, i) { 
         return color(d.data.label);
       });
+      
+    path.on('mouseover', function(d) {
+                var total = d3.sum(dataset.map(function(d) {               
+                  return d.count;                                          
+                }));                                                       
+                var percent = Math.round(1000 * d.data.count / total) / 10;
+                tooltip.select('.label').html(d.data.label);               
+                tooltip.select('.count').html(d.data.count);               
+                tooltip.select('.percent').html(percent + '%');            
+                tooltip.style('display', 'block');                         
+              });                                                          
+        
+              path.on('mouseout', function() {                             
+                tooltip.style('display', 'none');                          
+              });
       
     var text = svg.selectAll('text')
       .data(pie(dataset))
