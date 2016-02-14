@@ -1,6 +1,10 @@
 require "spec_helper"
 
 describe "The EASHL App" do
+  before :each do
+    stub_const "Team", Class.new
+  end
+  
   describe "GET '/'" do
     it "grabs the index page" do
       get "/"
@@ -26,11 +30,10 @@ describe "The EASHL App" do
         and_return Repository::GameRepository
       allow( Repository::GameRepository ).to receive( :game_victor_data )
       
-      stub_const "Team", Class.new
       allow( Team ).to receive( :where ).and_return [team]
     end
     
-    it "grabs the view_stats page" do
+    it "returns a successful response" do
       get "/view_team_stats/Home"
     
       expect( last_response ).to be_ok
@@ -60,18 +63,43 @@ describe "The EASHL App" do
       
       expect( last_response.body ).to match /No team/
     end
+  end
+  
+  describe "GET '/view_score_relationships'" do
+    let( :team ) { double( "team" ) }
     
-    it "instantiates a GameRepository" do # this test is gross because it is calling the helper in the view and passing...
-      get "/view_team_stats/Home"
-      
-      expect( Repository::GameRepository ).to have_received( :new ).
-        with( team )
+    before :each do
+      allow( Team ).to receive( :where ).and_return [team]
     end
     
-    it "it grabs all of the games where the team is the winner" do # this test is gross because it is calling the helper in the view and passing...
-      get "/view_team_stats/Home"
+    it "returns a successful response" do
+      get "/view_score_relationships/Home"
       
-      expect( Repository::GameRepository ).to have_received( :game_victor_data )
+      expect( last_response ).to be_ok
+    end
+    
+    it "finds the team" do
+      get "/view_score_relationships/Home"
+      
+      expect( Team ).to have_received( :where ).
+        with( name: "Home" )
+    end
+    
+    it "redirects to the home page the team does NOT exist" do
+      allow( Team ).to receive( :where ).and_return []
+      
+      get "/view_score_relationships/Home"
+      follow_redirect!
+      
+      expect( last_request.url ).to eq "http://example.org/"
+    end
+    
+    it "sets a flash message when it cannot find the team" do
+      allow( Team ).to receive( :where ).and_return []
+      get "/view_score_relationships/Home"
+      follow_redirect!
+      
+      expect( last_response.body ).to match /No team/
     end
   end
   
