@@ -1,11 +1,9 @@
 <h1>View Your Stats Below</h1>
- <div id="chart" data-src=<%= view_stats( @team ) %>></div>
+<div id="chart" data-src=<%= view_stats( @team ) %>></div>
 <script>
   (function(d3) {
     'use strict';
     var dataset = $( "#chart" ).data( "src" );
-    //         ];
-    console.log( dataset );
     
     var width = 960;
     
