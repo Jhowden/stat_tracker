@@ -25,23 +25,23 @@ end
       player = Player.find( rand( 1..3 ) )
       goal = Goal.create!( ppp: false, period: t + 1, time_scored: "0#{t}:#{t}#{t+2}", game_id: game.id, player_id: player.id, game_id: game.id ) 
       if player.id == 3
-        Assist.create!( ppp: false, period: t + 1, player_id:  player.id - 1, goal_id: goal.id )
+        PrimaryAssist.create!( ppp: false, period: t + 1, player_id:  player.id - 1, goal_id: goal.id )
       elsif  player.id == 1
-        Assist.create!( ppp: false, period: t + 1, player_id:  player.id + 1, goal_id: goal.id )
+        PrimaryAssist.create!( ppp: false, period: t + 1, player_id:  player.id + 1, goal_id: goal.id )
       else
-        Assist.create!( ppp: false, period: t + 1, player_id:  player.id + 1, goal_id: goal.id )
-        Assist.create!( ppp: false, period: t + 1, player_id:  player.id - 1, goal_id: goal.id )
+        PrimaryAssist.create!( ppp: false, period: t + 1, player_id:  player.id + 1, goal_id: goal.id )
+        SecondaryAssist.create!( ppp: false, period: t + 1, player_id:  player.id - 1, goal_id: goal.id )
       end
     else
       player = Player.find( rand( 3..6 ) )
       goal = Goal.create!( ppp: false, period: t + 1, time_scored: "0#{t}:#{t}#{t+2}", game_id: game.id, player_id: player.id, game_id: game.id )
       if  player.id == 6
-        Assist.create!( ppp: false, period: t + 1, player_id:  player.id - 1, goal_id: goal.id )
+        PrimaryAssist.create!( ppp: false, period: t + 1, player_id:  player.id - 1, goal_id: goal.id )
       elsif  player.id == 4
-        Assist.create!( ppp: false, period: t + 1, player_id:  player.id + 1, goal_id: goal.id )
+        PrimaryAssist.create!( ppp: false, period: t + 1, player_id:  player.id + 1, goal_id: goal.id )
       else
-        Assist.create!( ppp: false, period: t + 1, player_id: player.id + 1, goal_id: goal.id )
-        Assist.create!( ppp: false, period: t + 1 , player_id: player.id - 1, goal_id: goal.id )
+        PrimaryAssist.create!( ppp: false, period: t + 1, player_id: player.id + 1, goal_id: goal.id )
+       SecondaryAssist.create!( ppp: false, period: t + 1 , player_id: player.id - 1, goal_id: goal.id )
       end
     end
   end
@@ -51,23 +51,23 @@ end
       player = Player.find( rand( 1..3 ) )
       goal = Goal.create!( ppp: true, period: t + 1, time_scored: "0#{t}:#{t}#{t+2}", game_id: game.id, player_id: player.id )
       if  player.id == 3
-        Assist.create!( ppp: false, period: t + 1, player_id: player.id - 1, goal_id: goal.id )
+        PrimaryAssist.create!( ppp: false, period: t + 1, player_id: player.id - 1, goal_id: goal.id )
       elsif  player.id == 1
-        Assist.create!( ppp: false, period: t + 1, player_id: player.id + 1, goal_id: goal.id )
+        PrimaryAssist.create!( ppp: false, period: t + 1, player_id: player.id + 1, goal_id: goal.id )
       else
-        Assist.create!( ppp: false, period: t + 1, player_id: player.id + 1, goal_id: goal.id )
-        Assist.create!( ppp: false, period: t + 1, player_id: player.id - 1, goal_id: goal.id )
+        PrimaryAssist.create!( ppp: false, period: t + 1, player_id: player.id + 1, goal_id: goal.id )
+        SecondaryAssist.create!( ppp: false, period: t + 1, player_id: player.id - 1, goal_id: goal.id )
       end
     else
       player = Player.find( rand( 3..6 ) )
       goal = Goal.create!( ppp: true, period: t + 1, time_scored: "0#{t}:#{t}#{t+2}", game_id: game.id, player_id: player.id )
       if  player.id == 6
-        Assist.create!( ppp: false, period: t + 1, player_id: player.id - 1, goal_id: goal.id )
+        PrimaryAssist.create!( ppp: false, period: t + 1, player_id: player.id - 1, goal_id: goal.id )
       elsif  player.id == 4
-        Assist.create!( ppp: false, period: t + 1, player_id: player.id + 1, goal_id: goal.id )
+        PrimaryAssist.create!( ppp: false, period: t + 1, player_id: player.id + 1, goal_id: goal.id )
       else
-        Assist.create!( ppp: false, period: t + 1, player_id: player.id + 1, goal_id: goal.id )
-        Assist.create!( ppp: false, period: t + 1, player_id: player.id - 1, goal_id: goal.id )
+        PrimaryAssist.create!( ppp: false, period: t + 1, player_id: player.id + 1, goal_id: goal.id )
+        SecondaryAssist.create!( ppp: false, period: t + 1, player_id: player.id - 1, goal_id: goal.id )
       end
     end
   end
