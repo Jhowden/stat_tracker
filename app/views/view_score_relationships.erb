@@ -1,13 +1,12 @@
 <h1>View Player Relationships Below</h1>
-
+<div id="chart" data-players=<%= @players.to_json %> 
+               data-src=<%= view_assist_relationships( @team ) %>>
+</div>
 <script>
 (function(d3) {
-  var matrix = [
-    [11975,  5871, 8916, 2868],
-    [ 1951, 10048, 2060, 6171],
-    [ 8010, 16145, 8090, 8045],
-    [ 1013,   990,  940, 6907]
-  ];
+  var matrix = $( "#chart" ).data( "src" );
+  
+  var textLabels = $( "#chart" ).data( "players" );
   
   var chord = d3.layout.chord()
       .padding(.05)
@@ -39,7 +38,7 @@
       .on("mouseover", fade(.1))
       .on("mouseout", fade(1));
       
-  var textLabels = ["Black", "Blonde", "Brown", "Red"]; 
+  
   svg.append("g").selectAll("text")
       .data(chord.groups)
       .enter()
@@ -72,6 +71,24 @@
           .style("opacity", opacity);
     };
   }
+  
+  "Has assisted on 33% of X's goals"
+  function chordTip (d) {
+    var p = d3.format(".2%"), q = d3.format(",.3r")
+    return "Chord Info:<br/>"
+      + (owes ? d.sname : d.tname)  + " owes "+ (owes ? d.tname : d.sname) + " "
+      + q(d.svalue) + "B<br/>"
+      + p(d.svalue/d.stotal) + " of " + d.sname + "'s Total (" + q(d.stotal) + "B)<br/>"
+      + p(d.svalue/d.mtotal) + " of Matrix Total (" + q(d.mtotal) + "B)<br/>"
+  };
+
+  "Has assisted on 85% of the goals scored"
+  function groupTip (d) {
+    var p = d3.format(".1%"), q = d3.format(",.3r")
+    return "Group Info:<br/>"
+        + d.gname + (owes ? " owes ": " is owed ") + q(d.gvalue) + "B<br/>"
+        + p(d.gvalue/d.mtotal) + " of Matrix Total (" + q(d.mtotal) + "B)"
+  };
 })(window.d3);
 </script>
 

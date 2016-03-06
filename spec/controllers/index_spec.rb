@@ -67,9 +67,12 @@ describe "The EASHL App" do
   
   describe "GET '/view_score_relationships'" do
     let( :team ) { double( "team" ) }
+    let( :player1 ) { double( "player1", player_name: "p1", id: 1 ) }
+    let( :player2 ) { double( "player2", player_name: "p2", id: 2 ) }
     
     before :each do
       allow( Team ).to receive( :where ).and_return [team]
+      allow( team ).to receive( :players ).and_return [player1, player2]
     end
     
     it "returns a successful response" do
@@ -83,6 +86,12 @@ describe "The EASHL App" do
       
       expect( Team ).to have_received( :where ).
         with( name: "Home" )
+    end
+    
+    it "finds all the players for a team" do
+      get "/view_score_relationships/Home"
+      
+      expect( team ).to have_received( :players ).at_least :once
     end
     
     it "redirects to the home page the team does NOT exist" do

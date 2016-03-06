@@ -20,4 +20,5 @@ gem 'shotgun'
 group :test do
   gem 'rspec'
   gem "database_cleaner"
+  gem "byebug"
 end

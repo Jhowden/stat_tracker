@@ -23,6 +23,7 @@ end
 get "/view_score_relationships/:team_name" do
   @team = Team.where( name: params["team_name"] ).first
   if @team
+    @players = @team.players.sort_by { |player| player.id }.map( &:player_name )
     erb :view_score_relationships
   else
     flash[:error] = "No team with the name #{params['team_name']} exists. Please select a correct name."
